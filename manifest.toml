@@ -51,6 +51,17 @@ IVW columns — do not subtract or pick between them directly.
 timeout_secs = 1800
 artifact_prefix = "/artifacts/mrlap_official"
 
+# Task-level resource ceiling (WO step 5). The seed1 host run's whole-
+# machine sampling peak across three serial edges was ~10.2 GiB (not the
+# per-edge RSS); until a per-edge RSS measurement exists the ceiling is
+# set to 12 GiB to bound rather than to match the 8 GiB budget target —
+# tightening to 8 GiB after measurement is the recorded follow-up.
+[nodes.resources]
+cpus = 2.0
+memory = "12Gi"
+network = "isolated"
+pull_policy = "missing"
+
 [nodes.ports]
 inputs = [{ type = "file" }, { type = "file" }, { type = "file" }]
 outputs = [
