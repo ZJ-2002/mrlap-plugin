@@ -29,7 +29,8 @@ edges=(
 )
 
 run_edge() { # $1=idx(0-based)
-  local i=$1 out=$work/edge_$i
+  local i=$1
+  local out=$work/edge_$i
   mkdir -p "$out"
   read -r exp outc iv le lo <<< "${edges[$i]}"
   if [[ "${MRLAP_CONTAINER:-0}" == 1 ]]; then

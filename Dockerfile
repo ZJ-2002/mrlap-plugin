@@ -24,7 +24,7 @@ ENV CRAN_SNAPSHOT=${CRAN_SNAPSHOT}
 
 WORKDIR /tmp/source
 
-RUN Rscript -e 'options(repos = c(CRAN = sprintf("https://packagemanager.posit.co/cran/__linux__/noble/%s", Sys.getenv("CRAN_SNAPSHOT"))), HTTPUserAgent = sprintf("R/%s R (%s)", getRversion(), paste(getRversion(), R.version$platform, R.version$arch, R.version$os))); install.packages(c("cli", "cowplot", "data.table", "dplyr", "ggplot2", "glmnet", "gridExtra", "gtable", "ieugwasr", "jsonlite", "knitr", "lattice", "magrittr", "MASS", "pbapply", "psych", "rmarkdown", "tidyr", "tidyselect", "rlang", "stringr", "tibble", "plyr", "e1071", "readr", "gdata", "lavaan", "doParallel", "foreach", "iterators", "splitstackshape", "R.utils", "mgsub", "simsalapar", "Rcpp", "Matrix", "stringi"))'
+RUN Rscript -e 'options(repos = c(CRAN = sprintf("https://packagemanager.posit.co/cran/__linux__/noble/%s", Sys.getenv("CRAN_SNAPSHOT"))), HTTPUserAgent = sprintf("R/%s R (%s)", getRversion(), paste(getRversion(), R.version$platform, R.version$arch, R.version$os))); install.packages(c("cli", "cowplot", "data.table", "dplyr", "ggplot2", "glmnet", "gridExtra", "gtable", "ieugwasr", "jsonlite", "knitr", "lattice", "magrittr", "MASS", "pbapply", "plotly", "psych", "rmarkdown", "tidyr", "tidyselect", "rlang", "stringr", "tibble", "plyr", "e1071", "readr", "gdata", "lavaan", "doParallel", "foreach", "iterators", "splitstackshape", "R.utils", "mgsub", "simsalapar", "Rcpp", "Matrix", "stringi"))'
 
 RUN apt-get update \
   && apt-get install -y --no-install-recommends ca-certificates curl \
