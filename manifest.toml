@@ -51,14 +51,15 @@ IVW columns — do not subtract or pick between them directly.
 timeout_secs = 1800
 artifact_prefix = "/artifacts/mrlap_official"
 
-# Task-level resource ceiling (WO step 5). The seed1 host run's whole-
-# machine sampling peak across three serial edges was ~10.2 GiB (not the
-# per-edge RSS); until a per-edge RSS measurement exists the ceiling is
-# set to 12 GiB to bound rather than to match the 8 GiB budget target —
-# tightening to 8 GiB after measurement is the recorded follow-up.
+# Task-level resource ceiling (WO step 5), set from measurement: the
+# 2026-10-06 container-mode three-edge run sampled the R process RSS at
+# 1 s and peaked at 1.9 GiB (PARITY PASS 51/51 on that same run), so the
+# 8 Gi budget target carries ~4x headroom. The earlier "whole machine
+# 10.2 GiB" figure is page-cache-inclusive sampling, not task RSS, and
+# must not be cited as a limit requirement.
 [nodes.resources]
 cpus = 2.0
-memory = "12Gi"
+memory = "8Gi"
 network = "isolated"
 pull_policy = "missing"
 
