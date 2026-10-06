@@ -1,17 +1,20 @@
 schema_version = 1
 plugin_name = "mrlap"
 
-# WO-R-02 (2026-10-06): containerized official R MRlap. DEPLOY GATE —
-# the image reference below is a local build tag; before this family is
-# added to plugins.toml it must be pushed and re-pinned to an immutable
-# digest (ghcr.io/ZJ-2002/mrlap-official@sha256:..., the cellphonedb
-# precedent). The LD-score panel bundle is not yet registered in the
-# wjixiang catalog; the panel must be published with the seed1-acceptance
-# 45-file content identity (22 per-chromosome LD-score gzips + M_5_50 +
-# w_hm3.noMHC.snplist, source tree ~/tools/genetics/ldsc_assets, 211 MB)
-# before any DAG can bind it.
+# WO-R-02 (2026-10-06): containerized official R MRlap. Image is digest-
+# pinned to the reference-BLAS rebuild pushed to
+# ghcr.io/ZJ-2002/mrlap-official (package visibility private — fine-
+# grained token cannot flip it; owner one-click, same debt class as the
+# 8 repushed org mirrors). The LD-score panel (22 per-chromosome
+# LD-score gzips + M_5_50 + w_hm3.noMHC.snplist, source tree
+# ~/tools/genetics/ldsc_assets, 211 MB, the seed1-acceptance content
+# identity) is published to ZJ-2002/catalog-mrlap-ldsc-eur-w-ld-hm3-no-
+# mhc and materialized in the local panel cache; the package repo's root
+# index.json is in registry form (a catalog-tool artifact also present on
+# legacy wjixiang bundles) and the CENTRAL registry index at
+# wjixiang/catalog-index needs a PR the token cannot open.
 [image]
-reference = "localhost/mrlap-official:0.0.3.3"
+reference = "ghcr.io/zj-2002/mrlap-official@sha256:78f195b862a3b7c5f8d96a96576cfb2c66b08f9bd31a739da59a017726cd063d"
 tag = "0.0.3.3"
 upstream = "official R MRlap 0.0.3.3 @ n-mounier/MRlap commit 660f026864f8bfbbad5a8206bdff7d58f5d5d05b (RemoteSha recorded in the seed1 acceptance), GenomicSEM 0.0.5, TwoSampleMR 0.7.11 — an environment recorded independently from the twosamplemr family's 0.7.9 image; the two must never be cross-validated"
 license = "GPL-3"
@@ -19,7 +22,7 @@ license = "GPL-3"
 [[panels]]
 binding = "ldsc_assets"
 mount = "/panels/ldsc_assets"
-bundle = "wjixiang/catalog-mrlap-ldsc-eur-w-ld-hm3-no-mhc"   # TODO register before deploy
+bundle = "ZJ-2002/catalog-mrlap-ldsc-eur-w-ld-hm3-no-mhc"   # published 2026-10-06; local materialization pending
 
 [[nodes]]
 kind = "mrlap_official"

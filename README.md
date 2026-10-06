@@ -31,17 +31,27 @@ family is row 4: `mrlap_official`.
 
 ## Deploy gates (open — DO NOT add to plugins.toml until all closed)
 
-1. **Image digest pin**: build, push to `ghcr.io/ZJ-2002/mrlap-official`
-   (cellphonedb precedent), then replace `reference =
-   "localhost/mrlap-official:0.0.3.3"` in `manifest.toml` with the
-   `@sha256:` digest. Digest-pinning is mandatory: the reference pins
-   algorithm + R environment together.
-2. **LD panel registration**: publish `~/tools/genetics/ldsc_assets`
-   (211 MB: 22 per-chromosome LD-score gzips + M_5_50 +
-   `w_hm3.noMHC.snplist`, the 45-file content identity established in
-   the seed1 acceptance) as
-   `wjixiang/catalog-mrlap-ldsc-eur-w-ld-hm3-no-mhc` and materialize it;
-   the DAG cannot bind the panel until then.
+1. ~~Image digest pin~~ CLOSED: `manifest.toml` pins
+   `ghcr.io/zj-2002/mrlap-official@sha256:78f195b862a3…063d` (reference-
+   BLAS 3.12.0 rebuild, matching the host kernel of the seed1 acceptance;
+   the first OpenBLAS build moved the two bootstrap-aggregate columns by
+   ~1e-9/1e-8 — seed determinism itself confirmed byte-identical in the
+   OpenBLAS build). Remaining sub-item: the ghcr package is private
+   (fine-grained token cannot flip visibility; owner one-click in the
+   web UI, same debt class as the 8 repushed org mirrors).
+2. LD panel registration HALF-CLOSED: the 211 MB panel (22 per-chromosome
+   LD-score gzips + M_5_50 + `w_hm3.noMHC.snplist`, seed1 content
+   identity, digest `sha256:c1bdd30e…d065`) is published to
+   `ZJ-2002/catalog-mrlap-ldsc-eur-w-ld-hm3-no-mhc` and materialized in
+   the local panel cache (marker + manifest verified by
+   `autonomics-catalog list`). Two follow-ups: the package repo's root
+   index.json carries registry form (`repositories:[self]`, written by
+   `catalog publish` before it dies on the central-index commit) while
+   `install`/`validate_package_index` requires `repositories:[]` — the
+   API commit attempt was silently discarded by the hub endpoint, fix
+   needs a token with proper package write or an LFS-free git push; and
+   the central registry `wjixiang/catalog-index` (other owner) needs a
+   `create_pr=1` PR listing the new bundle.
 3. **Container parity**: `MRLAP_CONTAINER=1 test_mrlap_official.sh`
    green against the digest-pinned image, plus a deployed-DAG reproduction
    of the three edges, before the matrix row flips to ACCEPTED.

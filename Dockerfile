@@ -30,6 +30,18 @@ RUN apt-get update \
   && apt-get install -y --no-install-recommends ca-certificates curl \
   && rm -rf /var/lib/apt/lists/*
 
+# Kernel parity with the frozen host acceptance environment: the host ran
+# reference BLAS/LAPACK 3.12.0 single-threaded (/usr/lib/libblas.so.3.12.0
+# in R_environment_after.txt), while rocker defaults to OpenBLAS-pthread.
+# OpenBLAS shifted the two bootstrap-aggregate columns (corrected SE/P) by
+# ~1e-9/1e-8 against the host reference on the first container parity,
+# bit-identical seed behaviour excluded the RNG as the cause. Switching
+# the alternatives pins the same numerical kernel, making the 51-field
+# host-vs-container comparison strict instead of tolerance-based.
+RUN update-alternatives --set libblas.so.3-x86_64-linux-gnu /usr/lib/x86_64-linux-gnu/blas/libblas.so.3 \
+  && update-alternatives --set liblapack.so.3-x86_64-linux-gnu /usr/lib/x86_64-linux-gnu/lapack/liblapack.so.3 \
+  && Rscript -e 'writeLines(unname(sessionInfo()$BLAS))'
+
 # Method packages pinned to the exact commits the frozen host acceptance
 # environment recorded (R_environment_after.txt RemoteSha fields of the
 # seed1 acceptance library /home/zj-normal/R/library): MRlap @660f026 =
