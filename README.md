@@ -65,6 +65,13 @@ family is row 4: `mrlap_official`.
 - TwoSampleMR 0.7.11 here vs 0.7.9 in the twosamplemr family image are
   independently recorded environments; no cross-validation between them.
 - Effects are on standardized scales; NA-vs-NA comparisons stay honest.
+- Dependency declarations are NOT validated by design: `install.packages`
+  with `repos = NULL` (the pinned-commit tarball path) skips version
+  checks, so TwoSampleMR 0.7.11's declared `ieugwasr >= 1.2.0` coexists
+  with the CRAN snapshot's 1.1.0 exactly as in the host acceptance
+  library. The frozen offline three-edge path is what this image
+  reproduces and certifies; nothing here is a general
+  dependency-compatibility claim.
 - M/Y frozen feeds carry duplicate rsID rows (multi-allele
   representations); the plugin preserves input bytes and does not
   constitute general QC acceptance.
